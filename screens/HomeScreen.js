@@ -1,233 +1,156 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import { View, Text, Image, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const foodCategories = [
-    {
-      name: 'Category 1',
-      image: require('../assets/ramen.jpg'), // Add your image source here
-    },
-    {
-      name: 'Category 2',
-      image: require('../assets/sandwich.jpg'), // Add your image source here
-    },
-    {
-      name: 'Category 3',
-      image: require('../assets/salad.jpg'), // Add your image source here
-    },
-    {
-      name: 'Category 4',
-      image: require('../assets/burrito.jpg'), // Add your image source here
-    },
-];
-
-const bestDealsSlides = [
-    {
-      key: 'slide1',
-      image: require('../assets/ramen.jpg'),
-      foodName: 'Ramen',
-    },
-    {
-      key: 'slide2',
-      image: require('../assets/sandwich.jpg'),
-      foodName: 'Sandwich',
-    },
-    {
-      key: 'slide3',
-      image: require('../assets/salad.jpg'),
-      foodName: 'Salad',
-    },
-    {
-      key: 'slide4',
-      image: require('../assets/burrito.jpg'),
-      foodName: 'Burrito',
-    },
+const HomeScreen = () => {
+  const categoriesData = [
+    { id: '1', name: 'Houses', image: require('../assets/category1.jpg') },
+    { id: '2', name: 'Apartments', image: require('../assets/category2.jpg') },
+    { id: '3', name: 'Condos', image: require('../assets/category3.jpg') },
+    { id: '4', name: 'Land', image: require('../assets/category4.jpg') },
+    { id: '5', name: 'Building', image: require('../assets/category5.jpg') },
+    { id: '6', name: 'Town Houses', image: require('../assets/category6.jpg') },
+    // Add more categories as needed
   ];
 
-const popularFoods = [
-    {
-        name: 'Ramen',
-        image: require('../assets/ramen.jpg'), // Add your image source here
-        price: '1.00$',
-    },
-    {
-        name: 'Sandwich',
-        image: require('../assets/sandwich.jpg'), // Add your image source here
-        price: '1.00$',
-    },
-    {
-        name: 'Salad',
-        price: '1.00$',
-        image: require('../assets/salad.jpg'), // Add your image source here
-    },
-    {
-        name: 'Burrito',
-        price: '1.00$',
-        image: require('../assets/burrito.jpg'), // Add your image source here
-    },
+  const houseData = [
+    { id: '1', name: 'One Mission Bay', location: 'San Francisco, CA', image: require('../assets/house1.jpg') },
+    { id: '2', name: '1410 Steiner St', location: 'San Francisco, CA', image: require('../assets/house2.jpg') },
+    { id: '3', name: '246 Sussex St', location: 'San Francisco, CA', image: require('../assets/house3.jpg') },
+    { id: '4', name: '1206 Market St', location: 'San Francisco, CA', image: require('../assets/house4.jpg') },
+    // Add more house items as needed
   ];
 
-const HomeScreen = ({navigation}) => {
-  const handleMenuPress = () => {
-    navigation.navigate('MenuScreen'); // Navigate to the "Menu" screen
-  };
+  const windowWidth = Dimensions.get('window').width;
+  const numColumns = 2;
+  const categoryItemWidth = (windowWidth - 48) / numColumns; // Adjust margin and padding
 
-  const renderCategories = () => {
-      return foodCategories.map((category, index) => (
-        <View style={styles.category} key={`category_${index}`}>
-          <Image source={category.image} style={styles.categoryImage} />
-          <Text style={styles.categoryText}>{category.name}</Text>
-        </View>
-      ));
-  };
-
-  const renderBestDealsSlides = ({ item }) => {
-      return (
-        <View style={styles.slide}>
-          <Image source={item.image} style={styles.sliderImage} />
-          <View style={styles.overlay}>
-            <Text style={styles.overlayText}>{item.foodName}</Text>
-          </View>
-        </View>
-      );
-  };
-
-  const renderPopular = () => {
-      return popularFoods.map((popular, index) => (
-      <View style={styles.popularContainer}>
-          <View style={styles.popularItem} key={`popular_${index}`}>
-          <Image source={popular.image} style={styles.popularItemImage} />
-          </View>
-          <View style={styles.popularItemTextContainer}>
-              <Text style={styles.popularItemText}>{popular.name}</Text>
-              <Text style={styles.popularItemPrice}>{popular.price}</Text>
-          </View>
-      </View>
-      ));
-  };
-  
   return (
-      <ScrollView>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleMenuPress}>
-          <FontAwesome name="bars" size={30} style={{ marginLeft: 20 }} />
-        </TouchableOpacity>
-          <FontAwesome name="shopping-cart" size={30} style={{ marginRight: 20 }} />
+    <ScrollView style={styles.container}>
+      {/* Header Container */}
+      <View style={styles.headerContainer}>
+        {/* User Icon */}
+        <Image
+          source={require('../assets/user-icon.png')}
+          style={styles.icon}
+        />
+        <Text style={styles.title}>Home</Text>
+        {/* Map and Plus Icons */}
+        <View style={styles.iconContainer}>
+          <Image
+            source={require('../assets/map-icon.png')}
+            style={[styles.icon, styles.iconMargin]}
+          />
+          <Image
+            source={require('../assets/plus-icon.png')}
+            style={styles.icon}
+          />
+        </View>
       </View>
 
-      <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesTitle}>Popular Categories</Text>
-          <View style={styles.categoryImages}>{renderCategories()}</View>
+      {/* Categories Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Categories</Text>
+        <FlatList
+          horizontal
+          data={categoriesData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={[styles.categoryItem, { width: categoryItemWidth }]}>
+              <Image source={item.image} style={styles.categoryImage} />
+              <Text style={styles.categoryText}>{item.name}</Text>
+            </View>
+          )}
+        />
       </View>
 
-      <Text style={styles.Title}>Best Deals</Text>
-      <AppIntroSlider
-          data={bestDealsSlides}
-          renderItem={renderBestDealsSlides}
-          dotStyle={styles.dotStyle}
-          activeDotStyle={styles.activeDotStyle}
-          showNextButton={false}
-          showDoneButton={false}
-          showSkipButton={false}
-      />
-
-      <Text style={styles.Title}>Most Popular</Text>
-      <View style={styles.popularContainer}>{renderPopular()}</View>
-      </ScrollView>
+      {/* Houses Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Houses</Text>
+        <FlatList
+          data={houseData}
+          keyExtractor={(item) => item.id}
+          numColumns={numColumns} // Use numColumns to create 2 columns
+          renderItem={({ item }) => (
+            <View style={styles.houseItem}>
+              <Image source={item.image} style={styles.houseImage} />
+              <Text style={styles.boldText}>{item.name}</Text>
+              <Text>{item.location}</Text>
+            </View>
+          )}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  headerContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
   },
-  categoriesContainer: {
-    margin: 16,
+  icon: {
+    width: 32, 
+    height: 32,
   },
-  categoriesTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  categoryImages: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  category: {
-    alignItems: 'center',
-  },
-  categoryImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  categoryText: {
-    marginTop: 8,
-  },
-  Title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    margin: 16,
-  },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sliderImage: {
-    width: '100%',
-    height: 600,
-  },
-  overlay: {
-    position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overlayText: {
-    color: 'white',
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
   },
-  dotStyle: {
-    backgroundColor: '#ccc',
-  },
-  activeDotStyle: {
-    backgroundColor: '#0099cc',
-  },
-  popularContainer: {
-    maxWidth: 1600,
-    width: '84%',
-    alignSelf: 'center',
-  },
-  popularItem: {
-    alignItems: 'center',
-    margin: 4,
-    position: 'relative',
-  },
-  popularItemImage: {
-    width: '100%',
-    height: 400,
-  },
-  popularItemTextContainer: {
-    position: 'relative',
-    flex: 1,
+  iconContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 36,
-    paddingHorizontal: 4,
   },
-  popularItemText: {
-    fontSize: 22,
+  iconMargin: {
+    marginRight: 10,
   },
-  popularItemPrice: {
-    fontSize: 22,
-  },  
+  sectionContainer: {
+    padding: 16,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  categoryItem: {
+    marginRight: 16,
+    marginBottom: 16, // Add margin at the bottom
+    borderRadius: 8,
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  categoryImage: {
+    width: '100%',
+    aspectRatio: 1, // Maintain square aspect ratio
+  },
+  categoryText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    padding: 8,
+  },
+  houseItem: {
+    flex: 1,
+    margin: 8,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  houseImage: {
+    width: '100%',
+    aspectRatio: 4 / 3, // Maintain 4:3 aspect ratio
+  },
+  boldText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 4,
+  },
 });
 
 export default HomeScreen;

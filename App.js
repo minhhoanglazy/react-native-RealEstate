@@ -1,50 +1,47 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import SuccessScreen from './screens/SuccessScreen';
-import LandingScreen from './screens/LandingScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
-import MenuScreen from './screens/MenuScreen';
+import CategoriesScreen from './screens/CategoriesScreen';
+import SavedScreen from './screens/SavedScreen';
+import SearchScreen from './screens/SearchScreen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const Stack = createStackNavigator();
+
+const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LandingScreen">
-        <Stack.Screen
-          name="LandingScreen"
-          component={LandingScreen}
-          options={{ title: 'Welcome' }}
-        />
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{ title: 'Login' }}
-        />
-        <Stack.Screen
-          name="SignUpScreen"
-          component={SignUpScreen}
-          options={{ title: 'Sign Up' }}
-        />
-        <Stack.Screen
-          name="SuccessScreen"
-          component={SuccessScreen}
-          options={{ title: 'Success' }}
-        />
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ title: 'Home' }}
-        />
-        <Stack.Screen
-          name="MenuScreen"
-          component={MenuScreen}
-          options={{ title: 'Menu' }}
-        />
-      </Stack.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home';
+            } else if (route.name === 'Categories') {
+              iconName = focused ? 'list' : 'list';
+            } else if (route.name === 'Saved') {
+              iconName = focused ? 'heart' : 'heart';
+            } else if (route.name === 'Search') {
+              iconName = focused ? 'search' : 'search';
+            }
+
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          },
+          headerShown: false,
+        })}
+        tabBarOptions={{
+          activeTintColor: 'green',
+          inactiveTintColor: 'gray',
+        }}
+      >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Categories" component={CategoriesScreen} />
+      <Tab.Screen name="Saved" component={SavedScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
